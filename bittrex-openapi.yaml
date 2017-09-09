@@ -1,0 +1,385 @@
+openapi: '3.0.0'
+info:
+  title: Bittrex REST API
+  description: >-
+    Bittrex provides a simple and powerful REST API to allow you to programatically perform nearly all actions you can from our web interface. All requests use the application/json content type and go over https. The base url is https://bittrex.com/api/{version}/. All requests are GET requests and all responses come in a default response object with the result in the result field. Always check the success flag to ensure that your API call succeeded.
+
+    We are currently restricting orders to 500 open orders and 200,000 orders a day. We reserve the right to change these settings as we tune the system. If you are affected by these limits as an active trader, please email support@bittrex.com.
+
+    If you have any questions, feedback or recommendation for API support you can post a question in our support center.
+  termsOfService: 'https://bittrex.com/Home/Terms'
+  contact:
+    name: Bittrex LLC
+    url: https://bittrex.zendesk.com/hc/en-us
+    email: support@bittrex.com
+  license:
+    name: '-'
+  version: 1.1.0
+servers:
+  - url: https://bittrex.com/api/v1.1
+    description: Production server
+paths:
+  /public/getmarkets:
+    get:
+      summary: Used to get the open and available trading markets at Bittrex along with other meta data.
+      operationId: getMarkets
+      tags:
+        - public
+        - market
+      responses:
+        '200':
+          description: An array of markets.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Markets"
+  /public/getcurrencies:
+    get:
+      summary: Used to get all supported currencies at Bittrex along with other meta data.
+      operationId: getCurrencies
+      tags:
+        - public
+        - currency
+      responses:
+        '200':
+          description: An array of currencies.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Currencies"
+  /public/getticker:
+    get:
+      summary: Used to get the current tick values for a market.
+      operationId: getTicker
+      tags:
+        - public
+        - market
+      responses:
+        '200':
+          description: Ticker data for the given market.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ticker"
+      parameters:
+        - $ref: "#/components/parameters/MarketParameter"
+  /public/getmarketsummaries:
+    get:
+      summary: Used to get the last 24 hour summary of all active exchanges.
+      operationId: getMarketSummaries
+      tags:
+        - public
+        - market
+      responses:
+        '200':
+          description: Market summary
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketSummaries'
+  /public/getmarketsummary:
+    get:
+      summary: Used to get the last 24 hour summary of one active exchange.
+      operationId: getMarketSummaries
+      tags:
+        - public
+        - market
+      responses:
+        '200':
+          description: Market summary
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketSummaries'
+      parameters:
+        - $ref: "#/components/parameters/MarketParameter"
+  /public/getorderbook:
+    get:
+      summary: Used to retrieve the orderbook for a given market.
+      operationId: getOrderBook
+      tags:
+        - public
+        - market
+      responses:
+        '200':
+          description: Order book
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderBook'
+      parameters:
+        - $ref: "#/components/parameters/MarketParameter"
+        - $ref: "#/components/parameters/OrderBookTypeParameter"
+  /public/getmarkethistory:
+    get:
+      summary: Used to retrieve the latest trades that have occured for a specific market.
+      operationId: getMarketHistory
+      tags:
+        - public
+        - market
+      responses:
+        '200':
+          description: Market history
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketHistory'
+      parameters:
+        - $ref: "#/components/parameters/MarketParameter"
+#  /market/buylimit:
+#  /market/selllimit:
+#  /market/cancel:
+#  /market/getopenorders:
+#  /account/getbalances:
+#  /account/getbalance:
+#  /account/getdepositaddress:
+#  /account/withdraw:
+#  /account/getorder:
+#  /account/getorderhistory:
+#  /account/getwithdrawalhistory:
+#  /account/getwithdrawalhistory:
+components:
+  schemas:
+    Markets:
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/Market'
+          nullable: true
+    Market:
+      properties:
+        MarketCurrency:
+          type: string
+        BaseCurrency:
+          type: string
+        MarketCurrencyLong:
+          type: string
+        BaseCurrencyLong:
+          type: string
+        MinTradeSize:
+          type: number
+          format: double
+        MarketName:
+          type: string
+        IsActive:
+          type: boolean
+        Created:
+          type: string
+          format: date-time
+    Currencies:
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/Currency'
+          nullable: true
+    Currency:
+      properties:
+        Currency:
+          type: string
+        CurrencyLong:
+          type: string
+        MinConfirmation:
+          type: integer
+        TxFee:
+          type: number
+          format: double
+        IsActive:
+          type: boolean
+        CoinType:
+          type: string
+        BaseAddress:
+          type: string
+    Ticker:
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        result:
+          properties:
+            Bid:
+              type: number
+              format: double
+            Ask:
+              type: number
+              format: double
+            Last:
+              type: number
+              format: double
+          nullable: true
+    MarketSummaries:
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/MarketSummary'
+          nullable: true
+    MarketSummary:
+      properties:
+        MarketName:
+          type: string
+        High:
+          type: number
+          format: double
+        Low:
+          type: number
+          format: double
+        Volume:
+          type: number
+          format: double
+        Last:
+          type: number
+          format: double
+        BaseVolume:
+          type: number
+          format: double
+        TimeStamp:
+          type: string
+          format: date-time
+        Bid:
+          type: number
+          format: double
+        Ask:
+          type: number
+          format: double
+        OpenBuyOrders:
+          type: integer
+        OpenSellOrders:
+          type: integer
+        PrevDay:
+          type: number
+          format: double
+        Created:
+          type: string
+          format: date-time
+        DisplayMarketName:
+          type: string
+          nullable: true
+    OrderBook:
+      oneOf:
+      - $ref: '#/components/schemas/OrderBookBoth'
+      - $ref: '#/components/schemas/OrderBookBuy'
+      - $ref: '#/components/schemas/OrderBookSell'
+      required:
+      - type
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+      discriminator:
+        propertyName: type
+        mapping:
+          both: OrderBookBoth
+          buy: OrderBookBuy
+          sell: OrderBookSell
+    OrderBookBoth:
+      allOf:
+      - $ref: '#/components/schemas/OrderBook'
+      - type: object
+        properties:
+          result:
+            properties:
+              buy:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderBookEntry'
+                nullable: true
+              sell:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderBookEntry'
+                nullable: true
+            nullable: true
+    OrderBookBuy:
+      allOf:
+      - $ref: '#/components/schemas/OrderBook'
+      - type: object
+        properties:
+          result:
+            type: array
+            items:
+              $ref: '#/components/schemas/OrderBookEntry'
+            nullable: true
+    OrderBookSell:
+      allOf:
+      - $ref: '#/components/schemas/OrderBook'
+      - type: object
+        properties:
+          result:
+            type: array
+            items:
+              $ref: '#/components/schemas/OrderBookEntry'
+            nullable: true
+    OrderBookEntry:
+      properties:
+        Quantity:
+          type: number
+          format: double
+        Rate:
+          type: number
+          format: double
+    MarketHistory:
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/MarketHistoryEntry'
+          nullable: true
+    MarketHistoryEntry:
+      properties:
+        Id:
+          type: integer
+        TimeStamp:
+          type: string
+          format: date-time
+        Quantity:
+          type: number
+          format: double
+        Price:
+          type: number
+          format: double
+        Total:
+          type: number
+          format: double
+        FillType:
+          type: string
+        OrderType:
+          type: string
+  parameters:
+    MarketParameter:
+      name: market
+      in: query
+      description: A string literal for the market.
+      example: BTC-LTC
+      required: true
+      schema:
+        type: string
+    OrderBookTypeParameter:
+      name: type
+      in: query
+      description: Buy, sell or both to identify the type of orderbook to return.
+      required: true
+      schema:
+        type: string
+externalDocs:
+  description: Bittrex API developer's guide.
+  url: 'https://bittrex.com/home/api'
