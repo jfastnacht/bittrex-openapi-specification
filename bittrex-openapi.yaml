@@ -29,7 +29,7 @@ paths:
         '200':
           description: An array of markets.
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/Markets'
   /public/getcurrencies:
@@ -42,7 +42,7 @@ paths:
         '200':
           description: An array of currencies.
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/Currencies'
   /public/getticker:
@@ -55,7 +55,7 @@ paths:
         '200':
           description: Ticker data for the given market.
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/Ticker'
       parameters:
@@ -70,7 +70,7 @@ paths:
         '200':
           description: Market summary
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/MarketSummaries'
   /public/getmarketsummary:
@@ -83,7 +83,7 @@ paths:
         '200':
           description: Market summary
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/MarketSummaries'
       parameters:
@@ -98,7 +98,7 @@ paths:
         '200':
           description: Order book
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/OrderBook'
       parameters:
@@ -114,7 +114,7 @@ paths:
         '200':
           description: Market history
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/MarketHistory'
       parameters:
@@ -131,7 +131,7 @@ paths:
         '200':
           description: Buy limit
           content:
-            application/json:
+            application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/BuyLimit'
       parameters:
