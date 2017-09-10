@@ -305,7 +305,25 @@ paths:
         - $ref: '#/components/parameters/QuantityParameter'
         - $ref: '#/components/parameters/AddressParameter'
         - $ref: '#/components/parameters/PaymentIdParameter'
-#  /account/getorder:
+  /account/getorder:
+    get:
+      summary: Used to retrieve a single order by uuid.
+      security:
+        - ApiSign: []
+      operationId: getOrder
+      tags:
+        - account
+      responses:
+        '200':
+          description: Get specific order
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/Order'
+      parameters:
+        - $ref: '#/components/parameters/ApiKeyParameter'
+        - $ref: '#/components/parameters/NonceParameter'
+        - $ref: '#/components/parameters/UuidParameter'
 #  /account/getorderhistory:
 #  /account/getwithdrawalhistory:
 #  /account/getwithdrawalhistory:
@@ -688,6 +706,73 @@ components:
             uuid:
               type: string
               format: uuid
+          nullable: true
+    Order:
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        result:
+          properties:
+            AccountId:
+              nullable: true
+            OrderUuid:
+              type: string
+              format: uuid
+            Exchange:
+              type: string
+            Type:
+              type: string
+            Quantity:
+              type: number
+              format: double
+            QuantityRemaining:
+              type: number
+              format: double
+            Limit:
+              type: number
+              format: double
+            Reserved:
+              type: number
+              format: double
+            ReserveRemaining:
+              type: number
+              format: double
+            CommissionReserved:
+              type: number
+              format: double
+            CommissionReserveRemaining:
+              type: number
+              format: double
+            CommissionPaid:
+              type: number
+              format: double
+            Price:
+              type: number
+              format: double
+            PricePerUnit:
+              nullable: true
+            Opened:
+              type: string
+              format: date-time
+            Closed:
+              nullable: true
+            IsOpen:
+              type: boolean
+            Sentinel:
+              type: string
+              format: uuid
+            CancelInitiated:
+              type: boolean
+            ImmediateOrCancel:
+              type: boolean
+            IsConditional:
+              type: boolean
+            Condition:
+              type: string
+            ConditionTarget:
+              nullable: true
           nullable: true
   parameters:
     MarketParameter:
