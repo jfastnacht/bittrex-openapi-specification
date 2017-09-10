@@ -259,7 +259,28 @@ paths:
         - $ref: '#/components/parameters/ApiKeyParameter'
         - $ref: '#/components/parameters/NonceParameter'
         - $ref: '#/components/parameters/CurrencyParameter'
-#  /account/getdepositaddress:
+  /account/getdepositaddress:
+    get:
+      summary: >-
+        Used to retrieve or generate an address for a specific currency. If one
+        does not exist, the call will fail and return ADDRESS_GENERATING until
+        one is available.
+      security:
+        - ApiSign: []
+      operationId: getDepositAddress
+      tags:
+        - account
+      responses:
+        '200':
+          description: Deposit address
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/DepositAddress'
+      parameters:
+        - $ref: '#/components/parameters/ApiKeyParameter'
+        - $ref: '#/components/parameters/NonceParameter'
+        - $ref: '#/components/parameters/CurrencyParameter'
 #  /account/withdraw:
 #  /account/getorder:
 #  /account/getorderhistory:
@@ -619,6 +640,19 @@ components:
         Uuid:
           type: string
           format: uuid
+          nullable: true
+    DepositAddress:
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        result:
+          properties:
+            Currency:
+              type: string
+            Address:
+              type: string
           nullable: true
   parameters:
     MarketParameter:
