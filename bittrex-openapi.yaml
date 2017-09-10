@@ -281,7 +281,30 @@ paths:
         - $ref: '#/components/parameters/ApiKeyParameter'
         - $ref: '#/components/parameters/NonceParameter'
         - $ref: '#/components/parameters/CurrencyParameter'
-#  /account/withdraw:
+  /account/withdraw:
+    get:
+      summary: >-
+        Used to withdraw funds from your account. Note: please account for
+        txfee.
+      security:
+        - ApiSign: []
+      operationId: withdraw
+      tags:
+        - account
+      responses:
+        '200':
+          description: Withdraw
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/Withdraw'
+      parameters:
+        - $ref: '#/components/parameters/ApiKeyParameter'
+        - $ref: '#/components/parameters/NonceParameter'
+        - $ref: '#/components/parameters/CurrencyParameter'
+        - $ref: '#/components/parameters/QuantityParameter'
+        - $ref: '#/components/parameters/AddressParameter'
+        - $ref: '#/components/parameters/PaymentIdParameter'
 #  /account/getorder:
 #  /account/getorderhistory:
 #  /account/getwithdrawalhistory:
@@ -654,6 +677,18 @@ components:
             Address:
               type: string
           nullable: true
+    Withdraw:
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        result:
+          properties:
+            uuid:
+              type: string
+              format: uuid
+          nullable: true
   parameters:
     MarketParameter:
       name: market
@@ -674,7 +709,7 @@ components:
     QuantityParameter:
       name: quantity
       in: query
-      description: The amount to purchase.
+      description: A quantity of coins.
       example: 1.2
       required: true
       schema:
@@ -720,6 +755,22 @@ components:
       description: A string literal for the currency.
       example: LTC
       required: true
+      schema:
+        type: string
+    AddressParameter:
+      name: address
+      in: query
+      description: The address where to send the funds.
+      example: 1MCwBbhNGp5hRm5rC1Aims2YFRe2SXPYKt
+      required: true
+      schema:
+        type: string
+    PaymentIdParameter:
+      name: paymentid
+      in: query
+      description: Used for CryptoNotes/BitShareX/Nxt (memo/paymentid).
+      example: 666c75666679706f6e7920697320746865206265737420706f6e792065766572
+      required: false
       schema:
         type: string
   securitySchemes:
