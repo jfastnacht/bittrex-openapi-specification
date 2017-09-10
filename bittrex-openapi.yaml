@@ -221,7 +221,24 @@ paths:
         - $ref: '#/components/parameters/ApiKeyParameter'
         - $ref: '#/components/parameters/NonceParameter'
         - $ref: '#/components/parameters/MarketParameter'
-#  /account/getbalances:
+  /account/getbalances:
+    get:
+      summary: Used to retrieve all balances from your account.
+      security:
+        - ApiSign: []
+      operationId: getBalances
+      tags:
+        - account
+      responses:
+        '200':
+          description: Balances
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/Balances'
+      parameters:
+        - $ref: '#/components/parameters/ApiKeyParameter'
+        - $ref: '#/components/parameters/NonceParameter'
 #  /account/getbalance:
 #  /account/getdepositaddress:
 #  /account/withdraw:
@@ -542,6 +559,38 @@ components:
         Condition:
           nullable: true
         ConditionTarget:
+          nullable: true
+    Balances:
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/Balance'
+          nullable: true
+    Balance:
+      properties:
+        Currency:
+          type: string
+        Balance:
+          type: number
+          format: double
+        Available:
+          type: number
+          format: double
+        Pending:
+          type: number
+          format: double
+        CryptoAddress:
+          type: string
+        Requested:
+          type: boolean
+        Uuid:
+          type: string
+          format: uuid
           nullable: true
   parameters:
     MarketParameter:
