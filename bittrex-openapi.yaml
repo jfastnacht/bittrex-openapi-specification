@@ -362,7 +362,25 @@ paths:
         - $ref: '#/components/parameters/ApiKeyParameter'
         - $ref: '#/components/parameters/NonceParameter'
         - $ref: '#/components/parameters/OptionalCurrencyParameter'
-#  /account/getwithdrawalhistory:
+  /account/getdeposithistory:
+    get:
+      summary: Used to retrieve your deposit history.
+      security:
+        - ApiSign: []
+      operationId: getDepositHistory
+      tags:
+        - account
+      responses:
+        '200':
+          description: Get deposit history
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/DepositHistory'
+      parameters:
+        - $ref: '#/components/parameters/ApiKeyParameter'
+        - $ref: '#/components/parameters/NonceParameter'
+        - $ref: '#/components/parameters/OptionalCurrencyParameter'
 components:
   schemas:
     Markets:
@@ -893,6 +911,45 @@ components:
           format: double
         TxId:
           nullable: true
+        Canceled:
+          type: boolean
+        InvalidAddress:
+          type: boolean
+    DepositHistory:
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/DepositHistoryItem'
+          nullable: true
+    DepositHistoryItem:
+      properties:
+        PaymentUuid:
+          type: string
+          format: uuid
+        Currency:
+          type: string
+        Amount:
+          type: number
+          format: double
+        Address:
+          type: string
+        Opened:
+          type: string
+          format: date-time
+        Authorized:
+          type: boolean
+        PendingPayment:
+          type: boolean
+        TxCost:
+          type: number
+          format: double
+        TxId:
+          type: string
         Canceled:
           type: boolean
         InvalidAddress:
