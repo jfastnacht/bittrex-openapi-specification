@@ -200,7 +200,27 @@ paths:
         - $ref: '#/components/parameters/ApiKeyParameter'
         - $ref: '#/components/parameters/NonceParameter'
         - $ref: '#/components/parameters/UuidParameter'
-#  /market/getopenorders:
+  /market/getopenorders:
+    get:
+      summary: >-
+        Get all orders that you currently have opened. A specific market can be
+        requested.
+      security:
+        - ApiSign: []
+      operationId: getOpenOrders
+      tags:
+        - market
+      responses:
+        '200':
+          description: Open orders
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/OpenOrders'
+      parameters:
+        - $ref: '#/components/parameters/ApiKeyParameter'
+        - $ref: '#/components/parameters/NonceParameter'
+        - $ref: '#/components/parameters/MarketParameter'
 #  /account/getbalances:
 #  /account/getbalance:
 #  /account/getdepositaddress:
@@ -466,6 +486,62 @@ components:
         message:
           type: string
         result:
+          nullable: true
+    OpenOrders:
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/OpenOrder'
+          nullable: true
+    OpenOrder:
+      properties:
+        Uuid:
+          type: string
+          format: uuid
+          nullable: true
+        OrderUuid:
+          type: string
+          format: uuid
+        Exchange:
+          type: string
+        OrderType:
+          type: string
+        Quantity:
+          type: number
+          format: double
+        QuantityRemaining:
+          type: number
+          format: double
+        Limit:
+          type: number
+          format: double
+        CommissionPaid:
+          type: number
+          format: double
+        Price:
+          type: number
+          format: double
+        PricePerUnit:
+          nullable: true
+        Opened:
+          type: string
+          format: date-time
+        Closed:
+          nullable: true
+        CancelInitiated:
+          type: boolean
+        ImmediateOrCancel:
+          type: boolean
+        IsConditional:
+          type: boolean
+        Condition:
+          nullable: true
+        ConditionTarget:
           nullable: true
   parameters:
     MarketParameter:
