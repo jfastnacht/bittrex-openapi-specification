@@ -324,7 +324,25 @@ paths:
         - $ref: '#/components/parameters/ApiKeyParameter'
         - $ref: '#/components/parameters/NonceParameter'
         - $ref: '#/components/parameters/UuidParameter'
-#  /account/getorderhistory:
+  /account/getorderhistory:
+    get:
+      summary: Used to retrieve your order history.
+      security:
+        - ApiSign: []
+      operationId: getOrderHistory
+      tags:
+        - account
+      responses:
+        '200':
+          description: Get order history
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/OrderHistory'
+      parameters:
+        - $ref: '#/components/parameters/ApiKeyParameter'
+        - $ref: '#/components/parameters/NonceParameter'
+        - $ref: '#/components/parameters/OptionalMarketParameter'
 #  /account/getwithdrawalhistory:
 #  /account/getwithdrawalhistory:
 components:
@@ -774,6 +792,54 @@ components:
             ConditionTarget:
               nullable: true
           nullable: true
+    OrderHistory:
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderHistoryItem'
+          nullable: true
+    OrderHistoryItem:
+      properties:
+        OrderUuid:
+          type: string
+          format: uuid
+        Exchange:
+          type: string
+        TimeStamp:
+          type: string
+          format: date-time
+        OrderType:
+          type: string
+        Limit:
+          type: number
+          format: double
+        Quantity:
+          type: number
+          format: double
+        QuantityRemaining:
+          type: number
+          format: double
+        Commission:
+          type: number
+          format: double
+        Price:
+          type: number
+          format: double
+        PricePerUnit:
+          nullable: true
+        IsConditional:
+          type: boolean
+        Condition:
+          nullable: true
+        ConditionTarget:
+          nullable: true
+        ImmediateOrCancel:
+          type: boolean
   parameters:
     MarketParameter:
       name: market
@@ -781,6 +847,14 @@ components:
       description: A string literal for the market.
       example: BTC-LTC
       required: true
+      schema:
+        type: string
+    OptionalMarketParameter:
+      name: market
+      in: query
+      description: A string literal for the market.
+      example: BTC-LTC
+      required: false
       schema:
         type: string
     OrderBookTypeParameter:
