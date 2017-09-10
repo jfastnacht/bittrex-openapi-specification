@@ -142,7 +142,7 @@ paths:
         limit orders.
       security:
         - ApiSign: []
-      operationId: getBuyLimit
+      operationId: placeBuyLimitOrder
       tags:
         - market
       responses:
@@ -429,6 +429,7 @@ components:
             uuid:
               type: string
               format: uuid
+          nullable: true
     SellLimit:
       properties:
         success:
