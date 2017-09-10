@@ -239,7 +239,26 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ApiKeyParameter'
         - $ref: '#/components/parameters/NonceParameter'
-#  /account/getbalance:
+  /account/getbalance:
+    get:
+      summary: >-
+        Used to retrieve the balance from your account for a specific currency.
+      security:
+        - ApiSign: []
+      operationId: getBalance
+      tags:
+        - account
+      responses:
+        '200':
+          description: Specific balance
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/Balance'
+      parameters:
+        - $ref: '#/components/parameters/ApiKeyParameter'
+        - $ref: '#/components/parameters/NonceParameter'
+        - $ref: '#/components/parameters/CurrencyParameter'
 #  /account/getdepositaddress:
 #  /account/withdraw:
 #  /account/getorder:
@@ -569,9 +588,18 @@ components:
         result:
           type: array
           items:
-            $ref: '#/components/schemas/Balance'
+            $ref: '#/components/schemas/BalanceItem'
           nullable: true
     Balance:
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        result:
+          $ref: '#/components/schemas/BalanceItem'
+          nullable: true
+    BalanceItem:
       properties:
         Currency:
           type: string
@@ -652,6 +680,14 @@ components:
       schema:
         type: string
         format: uuid
+    CurrencyParameter:
+      name: currency
+      in: query
+      description: A string literal for the currency.
+      example: LTC
+      required: true
+      schema:
+        type: string
   securitySchemes:
     ApiSign:
       type: apiKey
