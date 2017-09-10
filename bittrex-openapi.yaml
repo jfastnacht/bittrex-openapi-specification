@@ -343,7 +343,25 @@ paths:
         - $ref: '#/components/parameters/ApiKeyParameter'
         - $ref: '#/components/parameters/NonceParameter'
         - $ref: '#/components/parameters/OptionalMarketParameter'
-#  /account/getwithdrawalhistory:
+  /account/getwithdrawalhistory:
+    get:
+      summary: Used to retrieve your withdrawal history.
+      security:
+        - ApiSign: []
+      operationId: getWithdrawalHistory
+      tags:
+        - account
+      responses:
+        '200':
+          description: Get withdrawal history
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/WithdrawalHistory'
+      parameters:
+        - $ref: '#/components/parameters/ApiKeyParameter'
+        - $ref: '#/components/parameters/NonceParameter'
+        - $ref: '#/components/parameters/OptionalCurrencyParameter'
 #  /account/getwithdrawalhistory:
 components:
   schemas:
@@ -840,6 +858,45 @@ components:
           nullable: true
         ImmediateOrCancel:
           type: boolean
+    WithdrawalHistory:
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/WithdrawalHistoryItem'
+          nullable: true
+    WithdrawalHistoryItem:
+      properties:
+        PaymentUuid:
+          type: string
+          format: uuid
+        Currency:
+          type: string
+        Amount:
+          type: number
+          format: double
+        Address:
+          type: string
+        Opened:
+          type: string
+          format: date-time
+        Authorized:
+          type: boolean
+        PendingPayment:
+          type: boolean
+        TxCost:
+          type: number
+          format: double
+        TxId:
+          nullable: true
+        Canceled:
+          type: boolean
+        InvalidAddress:
+          type: boolean
   parameters:
     MarketParameter:
       name: market
@@ -914,6 +971,14 @@ components:
       description: A string literal for the currency.
       example: LTC
       required: true
+      schema:
+        type: string
+    OptionalCurrencyParameter:
+      name: currency
+      in: query
+      description: A string literal for the currency.
+      example: LTC
+      required: false
       schema:
         type: string
     AddressParameter:
