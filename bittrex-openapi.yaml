@@ -2,11 +2,21 @@ openapi: '3.0.0'
 info:
   title: Bittrex REST API
   description: >-
-    Bittrex provides a simple and powerful REST API to allow you to programatically perform nearly all actions you can from our web interface. All requests use the application/json content type and go over https. The base url is https://bittrex.com/api/{version}/. All requests are GET requests and all responses come in a default response object with the result in the result field. Always check the success flag to ensure that your API call succeeded.
+    Bittrex provides a simple and powerful REST API to allow you to
+    programatically perform nearly all actions you can from our web interface.
+    All requests use the application/json content type and go over https. The
+    base url is https://bittrex.com/api/{version}/. All requests are GET
+    requests and all responses come in a default response object with the result
+    in the result field. Always check the success flag to ensure that your API
+    call succeeded.
 
-    We are currently restricting orders to 500 open orders and 200,000 orders a day. We reserve the right to change these settings as we tune the system. If you are affected by these limits as an active trader, please email support@bittrex.com.
+    We are currently restricting orders to 500 open orders and 200,000 orders a
+    day. We reserve the right to change these settings as we tune the system. If
+    you are affected by these limits as an active trader, please email
+    support@bittrex.com.
 
-    If you have any questions, feedback or recommendation for API support you can post a question in our support center.
+    If you have any questions, feedback or recommendation for API support you
+    can post a question in our support center.
   termsOfService: 'https://bittrex.com/Home/Terms'
   contact:
     name: Bittrex LLC
@@ -21,7 +31,9 @@ servers:
 paths:
   /public/getmarkets:
     get:
-      summary: Used to get the open and available trading markets at Bittrex along with other meta data.
+      summary: >-
+        Used to get the open and available trading markets at Bittrex
+        along with other meta data.
       operationId: getMarkets
       tags:
         - public
@@ -34,7 +46,9 @@ paths:
                 $ref: '#/components/schemas/Markets'
   /public/getcurrencies:
     get:
-      summary: Used to get all supported currencies at Bittrex along with other meta data.
+      summary: >-
+        Used to get all supported currencies at Bittrex along with other meta
+        data.
       operationId: getCurrencies
       tags:
         - public
@@ -106,7 +120,9 @@ paths:
         - $ref: '#/components/parameters/OrderBookTypeParameter'
   /public/getmarkethistory:
     get:
-      summary: Used to retrieve the latest trades that have occured for a specific market.
+      summary: >-
+        Used to retrieve the latest trades that have occured for a specific
+        market.
       operationId: getMarketHistory
       tags:
         - public
@@ -121,7 +137,9 @@ paths:
         - $ref: '#/components/parameters/MarketParameter'
   /market/buylimit:
     get:
-      summary: Used to place a buy order in a specific market. Use buylimit to place limit orders.
+      summary: >-
+        Used to place a buy order in a specific market. Use buylimit to place
+        limit orders.
       security:
         - ApiSign: []
       operationId: getBuyLimit
@@ -400,7 +418,8 @@ components:
     OrderBookTypeParameter:
       name: type
       in: query
-      description: Buy, sell or both to identify the type of orderbook to return.
+      description: >-
+        Buy, sell or both to identify the type of orderbook to return.
       required: true
       schema:
         type: string
