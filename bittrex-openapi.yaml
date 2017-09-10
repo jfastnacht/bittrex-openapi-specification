@@ -181,8 +181,25 @@ paths:
         - $ref: '#/components/parameters/MarketParameter'
         - $ref: '#/components/parameters/QuantityParameter'
         - $ref: '#/components/parameters/RateParameter'
-#  /market/selllimit:
-#  /market/cancel:
+  /market/cancel:
+    get:
+      summary: Used to cancel a buy or sell order.
+      security:
+        - ApiSign: []
+      operationId: cancelOrder
+      tags:
+        - market
+      responses:
+        '200':
+          description: Cancel order
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/CancelOrder'
+      parameters:
+        - $ref: '#/components/parameters/ApiKeyParameter'
+        - $ref: '#/components/parameters/NonceParameter'
+        - $ref: '#/components/parameters/UuidParameter'
 #  /market/getopenorders:
 #  /account/getbalances:
 #  /account/getbalance:
@@ -442,6 +459,14 @@ components:
               type: string
               format: uuid
           nullable: true
+    CancelOrder:
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        result:
+          nullable: true
   parameters:
     MarketParameter:
       name: market
@@ -493,6 +518,15 @@ components:
       required: true
       schema:
         type: integer
+    UuidParameter:
+      name: uuid
+      in: query
+      description: The uuid of buy or sell order.
+      example: 614c34e4-8d71-11e3-94b5-425861b86ab6
+      required: true
+      schema:
+        type: string
+        format: uuid
   securitySchemes:
     ApiSign:
       type: apiKey
