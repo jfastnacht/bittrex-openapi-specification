@@ -158,6 +158,29 @@ paths:
         - $ref: '#/components/parameters/MarketParameter'
         - $ref: '#/components/parameters/QuantityParameter'
         - $ref: '#/components/parameters/RateParameter'
+  /market/selllimit:
+    get:
+      summary: >-
+        Used to place an sell order in a specific market. Use selllimit to place
+        limit orders.
+      security:
+        - ApiSign: []
+      operationId: placeSellLimitOrder
+      tags:
+        - market
+      responses:
+        '200':
+          description: Sell limit
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SellLimit'
+      parameters:
+        - $ref: '#/components/parameters/ApiKeyParameter'
+        - $ref: '#/components/parameters/NonceParameter'
+        - $ref: '#/components/parameters/MarketParameter'
+        - $ref: '#/components/parameters/QuantityParameter'
+        - $ref: '#/components/parameters/RateParameter'
 #  /market/selllimit:
 #  /market/cancel:
 #  /market/getopenorders:
@@ -406,6 +429,18 @@ components:
             uuid:
               type: string
               format: uuid
+    SellLimit:
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        result:
+          properties:
+            uuid:
+              type: string
+              format: uuid
+          nullable: true
   parameters:
     MarketParameter:
       name: market
